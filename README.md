@@ -6,7 +6,7 @@
 
 > 跨平台 AI 生图客户端，一套 Flutter 代码构建 Android / iOS / Web / Windows / macOS / Linux。
 
-绘境 AI 是一个轻量的 AI 图像创作应用：接入火山方舟、OpenAI 官方、任意 OpenAI 兼容网关或 Pollinations 免费通道，支持 8 种画幅、1K/2K/4K 分辨率、一次生成最多 10 张，并提供沉浸画布与对话两种创作模式、全屏看图、AI 提示词润色与灵感生成。界面全部使用 Flutter 原生组件构建（`AppBar`、`NavigationBar`、`ListTile`、`SegmentedButton`、`ChoiceChip`、`DropdownMenu`、`FilledButton`、`DraggableScrollableSheet`），无 WebView 依赖。
+绘境 AI 是一个轻量的 AI 图像创作应用：接入火山方舟、OpenAI 官方、任意 OpenAI 兼容网关或 Pollinations 免费通道，支持 8 种画幅、1K/2K/4K 分辨率、一次生成最多 10 张，并提供沉浸画布与对话两种创作模式、全屏看图、AI 提示词润色与灵感生成。界面全部使用 Flutter 原生组件构建（`AppBar`、`NavigationBar`、`ListTile`、`SegmentedButton`、`ChoiceChip`、`DropdownMenu`、`FilledButton`、`DraggableScrollableSheet`），跨端表现一致。
 
 ## 下载
 

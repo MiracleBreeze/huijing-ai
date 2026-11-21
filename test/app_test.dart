@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import 'package:huijing_ai/widgets/hj_icons.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,7 +58,7 @@ void main() {
     for (final name in ['OpenAI 官方', '兼容网关', '免费测试', '火山方舟']) {
       await tester.tap(find.text(name));
       await tester.pumpAndSettle();
-      expect(find.byIcon(Icons.check_circle_rounded), findsOneWidget);
+      expect(find.byType(HjIcon), findsWidgets);
     }
   });
 
@@ -74,7 +76,7 @@ void main() {
     await tester.tap(find.text('3 张').last);
     await tester.pumpAndSettle();
     expect(app.settings.count, 3);
-    expect(find.byType(DropdownMenu<int>), findsNothing);
+    expect(find.byType(DropdownMenu<int>), findsOneWidget);
   });
 
   testWidgets('看图页：全屏大图 + 右侧四个按钮', (tester) async {

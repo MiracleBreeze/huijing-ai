@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models.dart';
 import '../services/media.dart';
 import '../theme.dart';
+import 'hj_icons.dart';
 
 Widget srcImage(String src,
     {BoxFit fit = BoxFit.cover, double? width, double? height}) {
@@ -36,7 +37,7 @@ Widget _placeholder(double? w, double? h) => Container(
       height: h,
       color: C.s2,
       alignment: Alignment.center,
-      child: const Icon(Icons.image_outlined, color: C.out),
+      child: const Icon(Icons.photo_library_outlined, color: C.out),
     );
 
 class Grab extends StatelessWidget {
@@ -93,14 +94,14 @@ Future<T?> showAppSheet<T>(
 }
 
 class IconBtn extends StatelessWidget {
-  final IconData icon;
+  final HjGlyph glyph;
   final VoidCallback? onTap;
   final double size;
   final Color color;
   final Color? bg;
 
   const IconBtn(
-    this.icon, {
+    this.glyph, {
     super.key,
     this.onTap,
     this.size = 36,
@@ -118,7 +119,7 @@ class IconBtn extends StatelessWidget {
           child: SizedBox(
             width: size,
             height: size,
-            child: Icon(icon, size: size * 0.52, color: color),
+            child: HjIcon(glyph, size: size * 0.52, color: color),
           ),
         ),
       );

@@ -5,6 +5,7 @@ import '../data/providers.dart';
 import '../services/media.dart';
 import '../theme.dart';
 import '../widgets/sheets.dart';
+import '../widgets/hj_icons.dart';
 import '../widgets/ui.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -63,7 +64,7 @@ class SettingsPage extends StatelessWidget {
                         s.model().isEmpty ? C.out : C.on),
                   ),
                 ),
-                const Icon(Icons.chevron_right_rounded, size: 18, color: C.out),
+                const HjIcon(HjGlyph.chevronRight, size: 18, color: C.out),
               ],
             ),
           ),
@@ -78,7 +79,7 @@ class SettingsPage extends StatelessWidget {
         const SizedBox(height: 8),
         _linkRow(
           '导出备份',
-          Icons.ios_share_rounded,
+          HjGlyph.share,
           () => Media.shareText(
             '绘境 AI 备份 · ${app.works.length} 件作品\n${s.toJson()}',
             name: 'huijing-backup',
@@ -140,8 +141,8 @@ class SettingsPage extends StatelessWidget {
           on && app.settings.model().isEmpty ? '${p.desc} · 还没选模型' : p.desc,
           style: t(11, FontWeight.w400, C.out),
         ),
-        trailing: Icon(
-          on ? Icons.check_circle_rounded : Icons.radio_button_unchecked,
+        trailing: HjIcon(
+          on ? HjGlyph.check : HjGlyph.grid,
           size: 18,
           color: on ? C.accent : C.outv,
         ),
@@ -166,13 +167,13 @@ class SettingsPage extends StatelessWidget {
         ),
       );
 
-  Widget _linkRow(String title, IconData icon, VoidCallback onTap) => InkWell(
+  Widget _linkRow(String title, HjGlyph glyph, VoidCallback onTap) => InkWell(
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12),
           child: Row(
             children: [
-              Icon(icon, size: 18, color: C.onv),
+              HjIcon(glyph, size: 18, color: C.onv),
               const SizedBox(width: 10),
               Expanded(child: Text(title, style: t(13.5)),
               ),
@@ -187,7 +188,7 @@ class SettingsPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 12),
           child: Row(
             children: [
-              Icon(Icons.delete_outline_rounded, size: 18, color: C.err),
+              const HjIcon(HjGlyph.trash, size: 18, color: C.err),
               const SizedBox(width: 10),
               Expanded(child: Text(title, style: t(13.5, FontWeight.w400, C.err)),
               ),

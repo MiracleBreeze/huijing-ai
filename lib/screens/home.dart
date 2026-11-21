@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../app.dart';
 import '../theme.dart';
 import '../widgets/logo.dart';
+import '../widgets/hj_icons.dart';
 import '../widgets/sheets.dart';
 import 'create_page.dart';
 import 'gallery_page.dart';
@@ -84,19 +85,18 @@ class _HomeState extends State<Home> {
           tooltip: s.mode == 'chat' ? '切到沉浸模式' : '切到对话模式',
           onPressed: () =>
               app.setMode(s.mode == 'chat' ? 'immersive' : 'chat'),
-          icon: Icon(s.mode == 'chat'
-              ? Icons.auto_awesome_mosaic_outlined
-              : Icons.chat_bubble_outline_rounded),
+          icon: HjIcon(s.mode == 'chat' ? HjGlyph.grid : HjGlyph.chat),
+
         ),
         IconButton(
           tooltip: '生成参数',
           onPressed: () => showParamsSheet(context),
-          icon: const Icon(Icons.tune_rounded),
+          icon: const HjIcon(HjGlyph.sliders),
         ),
         IconButton(
           tooltip: '设置',
           onPressed: () => setState(() => tab = 2),
-          icon: const Icon(Icons.image_outlined),
+          icon: const HjIcon(HjGlyph.gear),
         ),
         const SizedBox(width: 4),
       ],
@@ -114,7 +114,7 @@ class _HomeState extends State<Home> {
             index: tab,
             children: const [CreatePage(), GalleryPage(), SettingsPage()],
           ),
-          if (app.busy) const _Loading(),
+          if (app.busy) _Loading(onCancel: app.cancelGenerate),
         ],
       ),
       bottomNavigationBar: NavigationBar(
@@ -122,16 +122,16 @@ class _HomeState extends State<Home> {
         onDestinationSelected: (i) => setState(() => tab = i),
         destinations: const [
           NavigationDestination(
-              icon: Icon(Icons.auto_awesome_outlined),
-              selectedIcon: Icon(Icons.auto_awesome_rounded),
+              icon: const HjIcon(HjGlyph.spark, color: C.out),
+              selectedIcon: const HjIcon(HjGlyph.spark),
               label: '创作'),
           NavigationDestination(
-              icon: Icon(Icons.grid_view_outlined),
-              selectedIcon: Icon(Icons.grid_view_rounded),
+              icon: const HjIcon(HjGlyph.grid, color: C.out),
+              selectedIcon: const HjIcon(HjGlyph.grid),
               label: '作品'),
           NavigationDestination(
-              icon: Icon(Icons.tune_outlined),
-              selectedIcon: Icon(Icons.tune_rounded),
+              icon: const HjIcon(HjGlyph.gear, color: C.out),
+              selectedIcon: const HjIcon(HjGlyph.gear),
               label: '设置'),
         ],
       ),
@@ -140,7 +140,8 @@ class _HomeState extends State<Home> {
 }
 
 class _Loading extends StatelessWidget {
-  const _Loading();
+  final VoidCallback onCancel;
+  const _Loading({required this.onCancel});
 
   @override
   Widget build(BuildContext context) {
@@ -185,6 +186,16 @@ class _Loading extends StatelessWidget {
                 const SizedBox(height: 10),
                 Text('已用 ${app.elapsed}s',
                     style: t(11, FontWeight.w400, C.out)),
+                const SizedBox(height: 10),
+                TextButton(
+                  onPressed: onCancel,
+                  style: TextButton.styleFrom(
+                    foregroundColor: C.onv,
+                    minimumSize: const Size(64, 32),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                  ),
+                  child: Text('取消', style: t(12, FontWeight.w500, C.onv)),
+                ),
               ],
             ),
           ),

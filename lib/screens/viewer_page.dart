@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import '../models.dart';
 import '../services/media.dart';
 import '../theme.dart';
+import '../widgets/hj_icons.dart';
 import '../widgets/ui.dart';
 
 class ViewerPage extends StatefulWidget {
@@ -87,7 +88,7 @@ class _ViewerPageState extends State<ViewerPage> {
                   left: 10,
                   top: 8,
                   child: IconBtn(
-                    Icons.arrow_back_ios_new_rounded,
+                    HjGlyph.back,
                     bg: const Color(0x9914141A),
                     onTap: () => Navigator.of(context).pop(),
                     size: 38,
@@ -110,13 +111,13 @@ class _ViewerPageState extends State<ViewerPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       _RailBtn(
-                        icon: Icons.ios_share_rounded,
+                        glyph: HjGlyph.share,
                         label: '分享',
                         onTap: () => Media.shareImage(img, w.prompt),
                       ),
                       const SizedBox(height: 18),
                       _RailBtn(
-                        icon: Icons.tune_rounded,
+                        glyph: HjGlyph.edit,
                         label: '重新编辑',
                         onTap: () {
                           Navigator.of(context).pop();
@@ -125,7 +126,7 @@ class _ViewerPageState extends State<ViewerPage> {
                       ),
                       const SizedBox(height: 18),
                       _RailBtn(
-                        icon: Icons.auto_awesome_rounded,
+                        glyph: HjGlyph.spark,
                         label: '再次生成',
                         onTap: () {
                           Navigator.of(context).pop();
@@ -134,7 +135,7 @@ class _ViewerPageState extends State<ViewerPage> {
                       ),
                       const SizedBox(height: 18),
                       _RailBtn(
-                        icon: Icons.download_rounded,
+                        glyph: HjGlyph.download,
                         label: '保存',
                         onTap: () async {
                           _toast(await Media.saveImage(img));
@@ -203,10 +204,10 @@ class _ViewerPageState extends State<ViewerPage> {
 }
 
 class _RailBtn extends StatelessWidget {
-  final IconData icon;
+  final HjGlyph glyph;
   final String label;
   final VoidCallback onTap;
-  const _RailBtn({required this.icon, required this.label, required this.onTap});
+  const _RailBtn({required this.glyph, required this.label, required this.onTap});
 
   @override
   Widget build(BuildContext context) => SizedBox(
@@ -222,7 +223,7 @@ class _RailBtn extends StatelessWidget {
                 child: SizedBox(
                   width: 44,
                   height: 44,
-                  child: Icon(icon, size: 20, color: C.on),
+                  child: HjIcon(glyph, size: 20, color: C.on),
                 ),
               ),
             ),

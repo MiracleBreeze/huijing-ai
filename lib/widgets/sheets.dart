@@ -7,6 +7,7 @@ import '../services/api.dart';
 import '../services/assistant.dart';
 import '../services/store.dart';
 import '../theme.dart';
+import 'hj_icons.dart';
 import 'ui.dart';
 
 Future<void> showParamsSheet(BuildContext context) async {
@@ -55,12 +56,13 @@ Future<void> showParamsSheet(BuildContext context) async {
         const Spacer(),
         DropdownMenu<int>(
           initialSelection: app.settings.count,
-          width: 108,
+          width: 132,
           menuHeight: 320,
+          menuStyle: const MenuStyle(alignment: AlignmentDirectional.topStart),
           requestFocusOnTap: false,
           enableFilter: false,
           textStyle: t(13, FontWeight.w500),
-          trailingIcon: const Icon(Icons.keyboard_arrow_down_rounded,
+          trailingIcon: const HjIcon(HjGlyph.chevronDown,
               size: 18, color: C.onv),
           dropdownMenuEntries: [
             for (var i = 1; i <= 10; i++)
@@ -69,7 +71,6 @@ Future<void> showParamsSheet(BuildContext context) async {
           onSelected: (v) {
             if (v == null) return;
             app.setCount(v);
-            Navigator.of(context).pop();
           },
         ),
       ],
@@ -180,7 +181,7 @@ Widget _rowTile(BuildContext context,
               ],
             ),
           ),
-          const Icon(Icons.chevron_right_rounded, color: C.out, size: 18),
+          const HjIcon(HjGlyph.chevronRight, color: C.out, size: 18),
         ],
       ),
     ),
@@ -287,7 +288,7 @@ Future<void> showModelSheet(BuildContext context) async {
                                       ? FontWeight.w600
                                       : FontWeight.w400))),
                       if (app.settings.model() == m)
-                        const Icon(Icons.check_rounded,
+                        const HjIcon(HjGlyph.check,
                             size: 18, color: C.accent),
                     ],
                   ),

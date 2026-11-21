@@ -25,6 +25,7 @@ class AppState extends ChangeNotifier {
   String? lastError;
 
   Timer? _tick;
+  bool _cancel = false;
 
   Future<void> init() async {
     final sp = await SharedPreferences.getInstance();
@@ -190,6 +191,7 @@ class AppState extends ChangeNotifier {
       return null;
     }
 
+    _cancel = false;
     busy = true;
     elapsed = 0;
     stage = '正在理解提示词…';
@@ -219,6 +221,12 @@ class AppState extends ChangeNotifier {
         createdAt: DateTime.now(),
         refs: [...refs],
       );
+      if (_cancel) {
+        busy = false;
+        _tick?.cancel();
+        notifyListeners();
+        return null;
+      }
       works.insert(0, w);
       current = w;
       busy = false;
@@ -261,6 +269,13 @@ class AppState extends ChangeNotifier {
     settings.picked[w.provider] = w.model;
     _saveSettings();
     await generate(promptOverride: w.prompt);
+  }
+
+  void cancelGenerate() {
+    _cancel = true;
+    busy = false;
+    _tick?.cancel();
+    notifyListeners();
   }
 
   Future<void> deleteCurrent() async {

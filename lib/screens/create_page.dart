@@ -7,6 +7,7 @@ import '../models.dart';
 import '../services/media.dart';
 import '../theme.dart';
 import '../widgets/sheets.dart';
+import '../widgets/hj_icons.dart';
 import '../widgets/ui.dart';
 import 'viewer_page.dart';
 
@@ -249,16 +250,16 @@ class _CreatePageState extends State<CreatePage> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _chatAct(Icons.download_rounded, '保存',
+                  _chatAct(HjGlyph.download, '保存',
                       () async => _toast(await Media.saveImage(w.imgs[0]))),
-                  _chatAct(Icons.tune_rounded, '重新编辑', () {
+                  _chatAct(HjGlyph.edit, '重新编辑', () {
                     promptCtrl.text = w.prompt;
                     app.useWork(w);
                     setState(() {});
                   }),
-                  _chatAct(Icons.auto_awesome_rounded, '再次生成',
+                  _chatAct(HjGlyph.spark, '再次生成',
                       () => app.regenFrom(w)),
-                  _chatAct(Icons.ios_share_rounded, '分享',
+                  _chatAct(HjGlyph.share, '分享',
                       () => Media.shareImage(w.imgs[0], w.prompt)),
                 ],
               ),
@@ -285,10 +286,10 @@ class _CreatePageState extends State<CreatePage> {
     );
   }
 
-  Widget _chatAct(IconData icon, String tip, VoidCallback tap) => IconButton(
+  Widget _chatAct(HjGlyph glyph, String tip, VoidCallback tap) => IconButton(
         onPressed: tap,
         tooltip: tip,
-        icon: Icon(icon, size: 18, color: C.onv),
+        icon: HjIcon(glyph, size: 18, color: C.onv),
         style: IconButton.styleFrom(
           minimumSize: const Size(32, 32),
           padding: EdgeInsets.zero,
@@ -332,7 +333,7 @@ class _CreatePageState extends State<CreatePage> {
                           height: 18,
                           decoration: const BoxDecoration(
                               color: C.s4, shape: BoxShape.circle),
-                          child: const Icon(Icons.close,
+                          child: const HjIcon(HjGlyph.close,
                               size: 12, color: C.onv),
                         ),
                       ),
@@ -369,7 +370,7 @@ class _CreatePageState extends State<CreatePage> {
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 foregroundColor: C.out,
               ),
-              icon: const Icon(Icons.add_photo_alternate_outlined, size: 20),
+              icon: const HjIcon(HjGlyph.image, size: 20),
             ),
             Expanded(
               child: TextField(
@@ -400,7 +401,7 @@ class _CreatePageState extends State<CreatePage> {
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 foregroundColor: C.out,
               ),
-              icon: const Icon(Icons.tune_rounded, size: 20),
+              icon: const HjIcon(HjGlyph.sliders, size: 20),
             ),
             const SizedBox(width: 4),
             SizedBox(
@@ -418,7 +419,7 @@ class _CreatePageState extends State<CreatePage> {
                   minimumSize: const Size(36, 36),
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
-                child: const Icon(Icons.arrow_forward_rounded, size: 18),
+                child: const HjIcon(HjGlyph.arrowRight, size: 18),
               ),
             ),
           ],

@@ -1,0 +1,44 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.metadata
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Android
+android/.gradle/
+android/local.properties
+android/key.properties
+**/*.keystore
+**/*.jks
+
+# iOS / macOS
+**/Pods/
+**/.symlinks/
+**/Flutter/ephemeral/
+**/xcuserdata/
+**/*.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+
+# Linux / Windows
+**/flutter/ephemeral/
+windows/flutter/generated_plugin_registrant.*
+windows/flutter/generated_plugins.cmake
+linux/flutter/generated_plugin_registrant.*
+linux/flutter/generated_plugins.cmake
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 日志与临时文件
+*.log

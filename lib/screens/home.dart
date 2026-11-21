@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../app.dart';
 import '../theme.dart';
+import '../widgets/logo.dart';
+import '../widgets/sheets.dart';
 import 'create_page.dart';
 import 'gallery_page.dart';
 import 'settings_page.dart';
@@ -32,69 +34,106 @@ class _HomeState extends State<Home> {
     if (mounted) setState(() {});
   }
 
+  PreferredSizeWidget _appBar() {
+    if (tab == 2) {
+      return AppBar(
+        toolbarHeight: 60,
+        titleSpacing: 16,
+        title: Text('设置', style: t(20, FontWeight.w600)),
+      );
+    }
+    if (tab == 1) {
+      return AppBar(
+        toolbarHeight: 60,
+        titleSpacing: 16,
+        title: Text('作品', style: t(20, FontWeight.w600)),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Center(
+              child: Text('${app.works.length} 件',
+                  style: t(11.5, FontWeight.w400, C.out)),
+            ),
+          ),
+        ],
+      );
+    }
+    final s = app.settings;
+    return AppBar(
+      toolbarHeight: 64,
+      leadingWidth: 56,
+      leading: const Padding(
+        padding: EdgeInsets.only(left: 16),
+        child: Center(child: LogoMark(size: 28)),
+      ),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('绘境 AI', style: t(16, FontWeight.w600)),
+          Text(
+            '${s.provider.name} · ${s.model().isEmpty ? '未选择模型' : s.model()}',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: t(10.5, FontWeight.w400, C.out),
+          ),
+        ],
+      ),
+      actions: [
+        IconButton(
+          tooltip: s.mode == 'chat' ? '切到沉浸模式' : '切到对话模式',
+          onPressed: () =>
+              app.setMode(s.mode == 'chat' ? 'immersive' : 'chat'),
+          icon: Icon(s.mode == 'chat'
+              ? Icons.auto_awesome_mosaic_outlined
+              : Icons.chat_bubble_outline_rounded),
+        ),
+        IconButton(
+          tooltip: '生成参数',
+          onPressed: () => showParamsSheet(context),
+          icon: const Icon(Icons.tune_rounded),
+        ),
+        IconButton(
+          tooltip: '设置',
+          onPressed: () => setState(() => tab = 2),
+          icon: const Icon(Icons.image_outlined),
+        ),
+        const SizedBox(width: 4),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: C.s,
-      body: SafeArea(
-        bottom: false,
-        child: Stack(
-          children: [
-            IndexedStack(
-              index: tab,
-              children: [
-                CreatePage(onOpenSettings: () => setState(() => tab = 2)),
-                const GalleryPage(),
-                const SettingsPage(),
-              ],
-            ),
-            if (app.busy) const _Loading(),
-          ],
-        ),
-      ),
-      bottomNavigationBar: SafeArea(
-        top: false,
-        child: Container(
-          color: C.s,
-          padding: const EdgeInsets.only(top: 2, bottom: 4),
-          child: Row(
-            children: [
-              _tab(0, Icons.auto_awesome_outlined, '创作'),
-              _tab(1, Icons.grid_view_rounded, '作品'),
-              _tab(2, Icons.tune_rounded, '设置'),
-            ],
+      appBar: _appBar(),
+      body: Stack(
+        children: [
+          IndexedStack(
+            index: tab,
+            children: const [CreatePage(), GalleryPage(), SettingsPage()],
           ),
-        ),
+          if (app.busy) const _Loading(),
+        ],
       ),
-    );
-  }
-
-  Widget _tab(int i, IconData icon, String label) {
-    final on = tab == i;
-    return Expanded(
-      child: InkWell(
-        onTap: () => setState(() => tab = i),
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 6),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(height: 6),
-              Icon(icon, size: 22, color: on ? C.on : C.out),
-              const SizedBox(height: 4),
-              Text(label,
-                  style: t(11, on ? FontWeight.w600 : FontWeight.w400,
-                      on ? C.on : C.out)),
-              const SizedBox(height: 6),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 180),
-                width: on ? 18 : 0,
-                height: 2,
-                color: C.accent,
-              ),
-            ],
-          ),
-        ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: tab,
+        onDestinationSelected: (i) => setState(() => tab = i),
+        destinations: const [
+          NavigationDestination(
+              icon: Icon(Icons.auto_awesome_outlined),
+              selectedIcon: Icon(Icons.auto_awesome_rounded),
+              label: '创作'),
+          NavigationDestination(
+              icon: Icon(Icons.grid_view_outlined),
+              selectedIcon: Icon(Icons.grid_view_rounded),
+              label: '作品'),
+          NavigationDestination(
+              icon: Icon(Icons.tune_outlined),
+              selectedIcon: Icon(Icons.tune_rounded),
+              label: '设置'),
+        ],
       ),
     );
   }
@@ -117,29 +156,20 @@ class _Loading extends StatelessWidget {
               color: C.s1,
               borderRadius: BorderRadius.circular(R.xl),
               boxShadow: const [
-                BoxShadow(color: Color(0x66000000), blurRadius: 40, offset: Offset(0, 16)),
+                BoxShadow(
+                    color: Color(0x66000000),
+                    blurRadius: 40,
+                    offset: Offset(0, 16)),
               ],
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
-                  width: 44,
-                  height: 44,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      const SizedBox(
-                        width: 40,
-                        height: 40,
-                        child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Color(0xFF3A3A46)),
-                      ),
-                      const Icon(Icons.auto_awesome_rounded,
-                          size: 18, color: C.accent),
-                    ],
-                  ),
+                const SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: CircularProgressIndicator(
+                      strokeWidth: 2, color: C.accent),
                 ),
                 const SizedBox(height: 14),
                 Text(app.stage,
@@ -153,7 +183,8 @@ class _Loading extends StatelessWidget {
                   style: t(11, FontWeight.w400, C.out),
                 ),
                 const SizedBox(height: 10),
-                Text('已用 ${app.elapsed}s', style: t(11, FontWeight.w400, C.out)),
+                Text('已用 ${app.elapsed}s',
+                    style: t(11, FontWeight.w400, C.out)),
               ],
             ),
           ),

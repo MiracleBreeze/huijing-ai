@@ -16,8 +16,6 @@ class SettingsPage extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 20),
       children: [
-        Text('设置', style: t(22, FontWeight.w600)),
-        const SizedBox(height: 12),
         Text('服务商', style: t(12, FontWeight.w500, C.out)),
         const SizedBox(height: 8),
         for (final p in kProviders) _providerCard(context, p),
@@ -120,46 +118,32 @@ class SettingsPage extends StatelessWidget {
     final on = app.settings.providerId == p.id;
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: InkWell(
+      child: ListTile(
         onTap: () => app.setProvider(p.id),
-        borderRadius: BorderRadius.circular(R.l),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-          decoration: BoxDecoration(
-            color: on ? C.accent.withValues(alpha: 0.1) : C.s1,
-            borderRadius: BorderRadius.circular(R.l),
-            border: Border.all(
-              color: on ? C.accent.withValues(alpha: 0.45) : Colors.transparent,
-            ),
+        selected: on,
+        selectedTileColor: C.accent.withValues(alpha: 0.10),
+        tileColor: C.s1,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(R.l),
+          side: BorderSide(
+            color: on ? C.accent.withValues(alpha: 0.45) : Colors.transparent,
           ),
-          child: Row(
-            children: [
-              Container(
-                width: 34,
-                height: 34,
-                alignment: Alignment.center,
-                decoration: const BoxDecoration(
-                    color: C.s3, shape: BoxShape.circle),
-                child: Text(p.mono, style: t(14, FontWeight.w600, C.onv)),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(p.name, style: t(14, FontWeight.w500)),
-                    const SizedBox(height: 2),
-                    Text(p.desc, style: t(11, FontWeight.w400, C.out)),
-                  ],
-                ),
-              ),
-              if (on)
-                const Icon(Icons.check_circle_rounded,
-                    size: 18, color: C.accent)
-              else
-                const Icon(Icons.circle_outlined, size: 18, color: C.outv),
-            ],
-          ),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+        leading: CircleAvatar(
+          backgroundColor: C.s3,
+          radius: 17,
+          child: Text(p.mono, style: t(13.5, FontWeight.w600, C.onv)),
+        ),
+        title: Text(p.name, style: t(14, FontWeight.w500)),
+        subtitle: Text(
+          on && app.settings.model().isEmpty ? '${p.desc} · 还没选模型' : p.desc,
+          style: t(11, FontWeight.w400, C.out),
+        ),
+        trailing: Icon(
+          on ? Icons.check_circle_rounded : Icons.radio_button_unchecked,
+          size: 18,
+          color: on ? C.accent : C.outv,
         ),
       ),
     );

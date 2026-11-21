@@ -1,5 +1,5 @@
 name: huijing_ai
-description: "绘境 AI · 多服务商 AI 生图客户端（Flutter）"
+description: "绘境 AI · 跨平台 AI 生图客户端（方舟 Seedream / OpenAI / 兼容网关 / Pollinations）"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.9.3+10903
+version: 1.9.4+10904
 
 environment:
   sdk: ^3.14.0

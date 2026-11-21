@@ -15,16 +15,6 @@ class GalleryPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
-          child: Row(
-            children: [
-              Text('作品', style: t(22, FontWeight.w600)),
-              const Spacer(),
-              Text('${works.length} 件', style: t(11.5, FontWeight.w400, C.out)),
-            ],
-          ),
-        ),
         Expanded(
           child: works.isEmpty
               ? Center(

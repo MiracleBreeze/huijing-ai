@@ -47,6 +47,56 @@ ThemeData buildTheme() {
     ),
     iconTheme: const IconThemeData(color: C.onv, size: 20),
     dividerColor: Colors.transparent,
+    visualDensity: VisualDensity.standard,
+    materialTapTargetSize: MaterialTapTargetSize.padded,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: C.s,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      centerTitle: false,
+      titleSpacing: 0,
+      iconTheme: IconThemeData(color: C.onv),
+    ),
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: C.s,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      height: 68,
+      indicatorColor: C.accent.withValues(alpha: 0.14),
+      labelTextStyle: WidgetStateProperty.resolveWith((states) =>
+          t(11.5,
+              states.contains(WidgetState.selected)
+                  ? FontWeight.w600
+                  : FontWeight.w400,
+              states.contains(WidgetState.selected) ? C.on : C.out)),
+      iconTheme: WidgetStateProperty.resolveWith((states) => IconThemeData(
+          color: states.contains(WidgetState.selected) ? C.on : C.out)),
+    ),
+    chipTheme: ChipThemeData(
+      backgroundColor: C.s2,
+      selectedColor: C.accent.withValues(alpha: 0.14),
+      side: BorderSide.none,
+      labelStyle: t(12, FontWeight.w500, C.onv),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(R.m)),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    ),
+    dropdownMenuTheme: DropdownMenuThemeData(
+      menuStyle: MenuStyle(
+        backgroundColor: WidgetStatePropertyAll(C.s2),
+        surfaceTintColor: WidgetStatePropertyAll(Colors.transparent),
+        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(R.l))),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: C.s2,
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(R.m),
+            borderSide: BorderSide.none),
+      ),
+    ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
       fillColor: C.s1,

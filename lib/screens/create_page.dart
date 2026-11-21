@@ -11,8 +11,7 @@ import '../widgets/ui.dart';
 import 'viewer_page.dart';
 
 class CreatePage extends StatefulWidget {
-  final VoidCallback onOpenSettings;
-  const CreatePage({super.key, required this.onOpenSettings});
+  const CreatePage({super.key});
 
   @override
   State<CreatePage> createState() => _CreatePageState();
@@ -79,7 +78,6 @@ class _CreatePageState extends State<CreatePage> {
     final chat = s.mode == 'chat';
     return Column(
       children: [
-        _header(s),
         Expanded(
           child: chat ? _chatBody() : _immersiveBody(),
         ),
@@ -87,47 +85,6 @@ class _CreatePageState extends State<CreatePage> {
         _inputBar(chat),
         const SizedBox(height: 6),
       ],
-    );
-  }
-
-  Widget _header(AppSettings s) {
-    final p = s.provider;
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 8, 8),
-      child: Row(
-        children: [
-          Container(
-            width: 34,
-            height: 34,
-            decoration: const BoxDecoration(color: C.s2, shape: BoxShape.circle),
-            clipBehavior: Clip.antiAlias,
-            child: CustomPaint(painter: _MarkPainter()),
-          ),
-          const SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('绘境 AI', style: t(15, FontWeight.w600)),
-              Text(
-                '${p.name} · ${s.model().isEmpty ? '未选择' : s.model()}',
-                style: t(10.5, FontWeight.w400, C.out),
-              ),
-            ],
-          ),
-          const Spacer(),
-          IconBtn(
-            s.mode == 'chat'
-                ? Icons.auto_awesome_mosaic_outlined
-                : Icons.chat_bubble_outline_rounded,
-            onTap: () => app.setMode(s.mode == 'chat' ? 'immersive' : 'chat'),
-            bg: Colors.transparent,
-          ),
-          IconBtn(Icons.tune_rounded,
-              onTap: () => showParamsSheet(context), bg: Colors.transparent),
-          IconBtn(Icons.image_outlined, onTap: widget.onOpenSettings,
-              bg: Colors.transparent),
-        ],
-      ),
     );
   }
 
@@ -392,52 +349,76 @@ class _CreatePageState extends State<CreatePage> {
     return Padding(
       padding: const EdgeInsets.fromLTRB(14, 4, 14, 4),
       child: Container(
-        padding: const EdgeInsets.fromLTRB(6, 4, 4, 4),
+        height: 52,
+        padding: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
           color: C.s1,
           borderRadius: BorderRadius.circular(26),
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            IconBtn(Icons.add_photo_alternate_outlined, onTap: () async {
-              final d = await Media.pickImage();
-              if (d != null) app.addRef(d);
-            }, bg: Colors.transparent, color: C.out),
+            IconButton(
+              tooltip: '参考图',
+              onPressed: () async {
+                final d = await Media.pickImage();
+                if (d != null) app.addRef(d);
+              },
+              style: IconButton.styleFrom(
+                minimumSize: const Size(40, 40),
+                padding: EdgeInsets.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                foregroundColor: C.out,
+              ),
+              icon: const Icon(Icons.add_photo_alternate_outlined, size: 20),
+            ),
             Expanded(
               child: TextField(
                 controller: promptCtrl,
                 focusNode: focus,
                 minLines: 1,
                 maxLines: 4,
-                textInputAction: TextInputAction.newline,
+                textAlignVertical: TextAlignVertical.center,
                 style: t(13),
                 decoration: InputDecoration(
                   hintText: '描述画面…',
                   filled: false,
+                  isCollapsed: true,
                   border: InputBorder.none,
-                  isDense: true,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 11),
+                  enabledBorder: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
                   hintStyle: t(13, FontWeight.w400, C.out),
                 ),
               ),
             ),
-            IconBtn(Icons.tune_rounded,
-                onTap: () => showParamsSheet(context),
-                bg: Colors.transparent, color: C.out),
-            const SizedBox(width: 2),
-            Material(
-              color: has ? C.p : C.s3,
-              shape: const CircleBorder(),
-              clipBehavior: Clip.antiAlias,
-              child: InkWell(
-                onTap: has ? _send : null,
-                child: SizedBox(
-                  width: 36,
-                  height: 36,
-                  child: Icon(Icons.arrow_forward_rounded,
-                      size: 18, color: has ? C.onP : C.out),
+            IconButton(
+              tooltip: '生成参数',
+              onPressed: () => showParamsSheet(context),
+              style: IconButton.styleFrom(
+                minimumSize: const Size(40, 40),
+                padding: EdgeInsets.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                foregroundColor: C.out,
+              ),
+              icon: const Icon(Icons.tune_rounded, size: 20),
+            ),
+            const SizedBox(width: 4),
+            SizedBox(
+              width: 36,
+              height: 36,
+              child: FilledButton(
+                onPressed: has ? _send : null,
+                style: FilledButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  shape: const CircleBorder(),
+                  backgroundColor: has ? C.p : C.s3,
+                  foregroundColor: has ? C.onP : C.out,
+                  disabledBackgroundColor: C.s3,
+                  disabledForegroundColor: C.out,
+                  minimumSize: const Size(36, 36),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 ),
+                child: const Icon(Icons.arrow_forward_rounded, size: 18),
               ),
             ),
           ],
@@ -445,6 +426,7 @@ class _CreatePageState extends State<CreatePage> {
       ),
     );
   }
+
 }
 
 class _MarkPainter extends CustomPainter {

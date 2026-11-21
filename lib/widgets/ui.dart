@@ -124,33 +124,6 @@ class IconBtn extends StatelessWidget {
       );
 }
 
-class Pill extends StatelessWidget {
-  final String text;
-  final bool on;
-  final VoidCallback? onTap;
-  const Pill(this.text, {super.key, this.on = false, this.onTap});
-
-  @override
-  Widget build(BuildContext context) => GestureDetector(
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 160),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-          decoration: BoxDecoration(
-            color: on ? C.accent.withValues(alpha: 0.14) : C.s3,
-            borderRadius: BorderRadius.circular(R.m),
-            border: Border.all(
-              color: on ? C.accent.withValues(alpha: 0.5) : Colors.transparent,
-            ),
-          ),
-          child: Text(
-            text,
-            style: t(12.5, FontWeight.w500, on ? C.on : C.onv),
-          ),
-        ),
-      );
-}
-
 class SectionTitle extends StatelessWidget {
   final String text;
   const SectionTitle(this.text, {super.key});

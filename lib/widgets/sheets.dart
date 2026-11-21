@@ -22,35 +22,56 @@ Future<void> showParamsSheet(BuildContext context) async {
     const SectionTitle('画幅'),
     _ratioGrid(context),
     const SectionTitle('清晰度'),
-    Wrap(
-      spacing: 8,
-      children: [
-        for (final r in kResolutions)
-          Pill(
-            switch (r) { '1K' => '1K · 预览', '4K' => '4K · 超清', _ => '2K · 推荐' },
-            on: app.settings.resolution == r,
-            onTap: () {
-              app.setResolution(r);
-              Navigator.of(context).pop();
-            },
-          ),
-      ],
+    SizedBox(
+      width: double.infinity,
+      child: SegmentedButton<String>(
+        segments: const [
+          ButtonSegment(value: '1K', label: Text('1K · 预览')),
+          ButtonSegment(value: '2K', label: Text('2K · 推荐')),
+          ButtonSegment(value: '4K', label: Text('4K · 超清')),
+        ],
+        selected: {app.settings.resolution},
+        showSelectedIcon: false,
+        onSelectionChanged: (v) {
+          app.setResolution(v.first);
+          Navigator.of(context).pop();
+        },
+        style: SegmentedButton.styleFrom(
+          backgroundColor: C.s2,
+          selectedBackgroundColor: C.accent.withValues(alpha: 0.14),
+          selectedForegroundColor: C.on,
+          foregroundColor: C.onv,
+          side: BorderSide.none,
+          textStyle: t(12, FontWeight.w500),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(R.m)),
+        ),
+      ),
     ),
     const SectionTitle('数量'),
-    Wrap(
-      spacing: 8,
-      runSpacing: 8,
+    Row(
       children: [
-        for (var i = 1; i <= 10; i++)
-          SizedBox(
-            width: 52,
-            child: Pill('$i',
-                on: app.settings.count == i,
-                onTap: () {
-                  app.setCount(i);
-                  Navigator.of(context).pop();
-                }),
-          ),
+        Text('生成张数', style: t(13, FontWeight.w400, C.onv)),
+        const Spacer(),
+        DropdownMenu<int>(
+          initialSelection: app.settings.count,
+          width: 108,
+          menuHeight: 320,
+          requestFocusOnTap: false,
+          enableFilter: false,
+          textStyle: t(13, FontWeight.w500),
+          trailingIcon: const Icon(Icons.keyboard_arrow_down_rounded,
+              size: 18, color: C.onv),
+          dropdownMenuEntries: [
+            for (var i = 1; i <= 10; i++)
+              DropdownMenuEntry(value: i, label: '$i 张'),
+          ],
+          onSelected: (v) {
+            if (v == null) return;
+            app.setCount(v);
+            Navigator.of(context).pop();
+          },
+        ),
       ],
     ),
     const SizedBox(height: 8),
@@ -324,12 +345,24 @@ Future<void> showAssistantSheet(BuildContext context) async {
         children: [
           Text('AI 助手', style: t(22, FontWeight.w600)),
           const SizedBox(height: 12),
-          Row(
-            children: [
-              Pill('优化提示词', on: tab == 0, onTap: () => setSheet(() => tab = 0)),
-              const SizedBox(width: 8),
-              Pill('生成灵感', on: tab == 1, onTap: () => setSheet(() => tab = 1)),
+          SegmentedButton<int>(
+            segments: const [
+              ButtonSegment(value: 0, label: Text('优化提示词')),
+              ButtonSegment(value: 1, label: Text('生成灵感')),
             ],
+            selected: {tab},
+            showSelectedIcon: false,
+            onSelectionChanged: (v) => setSheet(() => tab = v.first),
+            style: SegmentedButton.styleFrom(
+              backgroundColor: C.s2,
+              selectedBackgroundColor: C.accent.withValues(alpha: 0.14),
+              selectedForegroundColor: C.on,
+              foregroundColor: C.onv,
+              side: BorderSide.none,
+              textStyle: t(12.5, FontWeight.w500),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(R.m)),
+            ),
           ),
           if (tab == 0) ...[
             const SectionTitle('力度'),
@@ -338,10 +371,11 @@ Future<void> showAssistantSheet(BuildContext context) async {
               runSpacing: 8,
               children: [
                 for (final tier in kTiers)
-                  Pill(
-                    tier.$2,
-                    on: app.settings.polishTier == tier.$1,
-                    onTap: () {
+                  ChoiceChip(
+                    label: Text(tier.$2, style: t(12, FontWeight.w500)),
+                    selected: app.settings.polishTier == tier.$1,
+                    showCheckmark: false,
+                    onSelected: (_) {
                       app.setPolishTier(tier.$1);
                       setSheet(() {});
                     },

@@ -45,6 +45,38 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('设置页四个服务商都能点选', (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(MaterialApp(theme: buildTheme(), home: const Home()));
+    await tester.pump();
+    await tester.tap(find.text('设置').last);
+    await tester.pumpAndSettle();
+    for (final name in ['OpenAI 官方', '兼容网关', '免费测试', '火山方舟']) {
+      await tester.tap(find.text(name));
+      await tester.pumpAndSettle();
+      expect(find.byIcon(Icons.check_circle_rounded), findsOneWidget);
+    }
+  });
+
+  testWidgets('数量用下拉竖列，选完即生效', (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(MaterialApp(theme: buildTheme(), home: const Home()));
+    await tester.pump();
+    await tester.tap(find.byTooltip('生成参数').first);
+    await tester.pumpAndSettle(const Duration(milliseconds: 600));
+    expect(find.byType(DropdownMenu<int>), findsOneWidget);
+    await tester.tap(find.byType(DropdownMenu<int>));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('3 张').last);
+    await tester.pumpAndSettle();
+    expect(app.settings.count, 3);
+    expect(find.byType(DropdownMenu<int>), findsNothing);
+  });
+
   testWidgets('看图页：全屏大图 + 右侧四个按钮', (tester) async {
     final w = app.works.first;
     await tester.pumpWidget(MaterialApp(
@@ -61,3 +93,5 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 }
+
+// provider 切换回归
